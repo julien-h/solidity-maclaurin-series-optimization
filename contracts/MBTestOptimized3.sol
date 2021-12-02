@@ -4,7 +4,7 @@ pragma solidity 0.7.4;
 import "./SafeMath.sol";
 
 contract MBTestOptimized3 {
-  using SafeMath for uint256;
+    using SafeMath for uint256;
 
     /**
     @dev    Main Function. Used to calculate mcLaurinBinomial.
@@ -30,8 +30,7 @@ contract MBTestOptimized3 {
         if (prec <= 3) {
             if (prec == 0) {
                 return 0;
-            }
-            else if (prec == 1) {
+            } else if (prec == 1) {
                 return k;
             } else if (prec == 2) {
                 return k.add(k.mul(a).div(b.mul(x)));
@@ -41,20 +40,18 @@ contract MBTestOptimized3 {
                 // Each new factor is then computed by adding b to the numerator.
                 // Remark that if we used signed integers, we would only require special cases until the 2nd term.
                 //
-                // The curse of solidity is that duplication allows for better optimizations... So it's always a tradeoff 
+                // The curse of solidity is that duplication allows for better optimizations... So it's always a tradeoff
                 // between clean DRY code and its optimized counterpart.
                 //
-                return k
-                .add(k.mul(a).div(b.mul(x)))
-                .sub(k.mul(a).mul(b.sub(a)).div(b.mul(x).mul(2).mul(b).mul(x)));
+                return k.add(k.mul(a).div(b.mul(x))).sub(k.mul(a).mul(b.sub(a)).div(b.mul(x).mul(2).mul(b).mul(x)));
             }
-        } else { 
+        } else {
             //
             // most likely execution path: prec>3
             //
             uint256 bx = b.mul(x);
             total = k.add(k.mul(a).div(bx));
-            
+
             uint256 factor_numer = b.sub(a);
             uint256 factor_denom = bx.add(bx);
 
@@ -86,24 +83,24 @@ contract MBTestOptimized3 {
         }
     }
 
-  /**
-   * @param args arguments packed into a single uint256 as follows:
-   *             prec: rightmost 16 bits
-   *             b: next 16 bits
-   *             a: next 16 bits
-   *             x: next 16 bits
-   *             k: next 128 bits
-   */
-  function calcExponential(uint256 args) public pure returns (uint256) {
-    uint256 prec = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 b = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 a = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 x = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 k = args & uint128(int128(-1));
-    return maclaurinBinomial(k, x, a, b, prec);
-  }
+    /**
+     * @param args arguments packed into a single uint256 as follows:
+     *             prec: rightmost 16 bits
+     *             b: next 16 bits
+     *             a: next 16 bits
+     *             x: next 16 bits
+     *             k: next 128 bits
+     */
+    function calcExponential(uint256 args) public pure returns (uint256) {
+        uint256 prec = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 b = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 a = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 x = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 k = args & uint128(int128(-1));
+        return maclaurinBinomial(k, x, a, b, prec);
+    }
 }

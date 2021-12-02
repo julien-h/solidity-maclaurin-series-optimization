@@ -4,7 +4,7 @@ pragma solidity 0.7.4;
 import "./SafeMath.sol";
 
 contract MBTestOptimized2 {
-  using SafeMath for uint256;
+    using SafeMath for uint256;
 
     /**
     @dev    Main Function. Used to calculate mcLaurinBinomial.
@@ -30,8 +30,7 @@ contract MBTestOptimized2 {
         if (prec <= 3) {
             if (prec == 0) {
                 return 0;
-            }
-            else if (prec == 1) {
+            } else if (prec == 1) {
                 return k;
             } else if (prec == 2) {
                 return k.add(k.mul(a).div(b.mul(x)));
@@ -41,20 +40,18 @@ contract MBTestOptimized2 {
                 // Each new factor is then computed by adding b to the numerator.
                 // Remark that if we used signed integers, we would only require special cases until the 2nd term.
                 //
-                // The curse of solidity is that duplication allows for better optimizations... So it's always a tradeoff 
+                // The curse of solidity is that duplication allows for better optimizations... So it's always a tradeoff
                 // between clean DRY code and its optimized counterpart.
                 //
-                return k
-                .add(k.mul(a).div(b.mul(x)))
-                .sub(k.mul(a).mul(b.sub(a)).div(b.mul(x).mul(2).mul(b).mul(x)));
+                return k.add(k.mul(a).div(b.mul(x))).sub(k.mul(a).mul(b.sub(a)).div(b.mul(x).mul(2).mul(b).mul(x)));
             }
-        } else { 
+        } else {
             //
             // most likely execution path: prec>3
             //
             uint256 bx = b.mul(x);
             total = k.add(k.mul(a).div(bx));
-            
+
             uint256 factor_numer = b.sub(a);
             uint256 factor_denom = bx.add(bx);
 
@@ -86,7 +83,13 @@ contract MBTestOptimized2 {
         }
     }
 
-  function calcExponential(uint256 k, uint256 x, uint256 a, uint256 b, uint prec) public pure returns (uint256) {
-    return maclaurinBinomial(k, x, a, b, prec);
-  }
+    function calcExponential(
+        uint256 k,
+        uint256 x,
+        uint256 a,
+        uint256 b,
+        uint256 prec
+    ) public pure returns (uint256) {
+        return maclaurinBinomial(k, x, a, b, prec);
+    }
 }

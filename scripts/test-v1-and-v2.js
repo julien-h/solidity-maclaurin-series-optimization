@@ -1,4 +1,4 @@
-// This script compares the output and gas costs of the baseline contract and 
+// This script compares the output and gas costs of the baseline contract and
 // both optimized v1 and optmized v2
 //
 const { BigNumber } = require("@ethersproject/bignumber");
@@ -14,13 +14,19 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const baselineContract = await hre.ethers.getContractFactory("MBTestBaseline");
+  const baselineContract = await hre.ethers.getContractFactory(
+    "MBTestBaseline"
+  );
   const baseline = await baselineContract.deploy();
 
-  const optimizedContract1 = await hre.ethers.getContractFactory("MBTestOptimized1");
+  const optimizedContract1 = await hre.ethers.getContractFactory(
+    "MBTestOptimized1"
+  );
   const optimized1 = await optimizedContract1.deploy();
 
-  const optimizedContract2 = await hre.ethers.getContractFactory("MBTestOptimized2");
+  const optimizedContract2 = await hre.ethers.getContractFactory(
+    "MBTestOptimized2"
+  );
   const optimized2 = await optimizedContract2.deploy();
 
   await baseline.deployed();
@@ -35,16 +41,32 @@ async function main() {
   let day = 250;
   let invRate = 2;
   let decimals = "1000000000000000000";
-  console.log('\nBatch 1: v1 vs baseline:');
+  console.log("\nBatch 1: v1 vs baseline:");
   for (let precision = 1; precision <= 23; ++precision) {
-    await utils.runComparison(baseline, optimized1, precision, decimals, invRate, day, 365, precision)
+    await utils.runComparison(
+      baseline,
+      optimized1,
+      precision,
+      decimals,
+      invRate,
+      day,
+      365,
+      precision
+    );
   }
-  console.log('\nBatch 2: v2 vs v1');
+  console.log("\nBatch 2: v2 vs v1");
   for (let precision = 1; precision <= 50; ++precision) {
-    await utils.runComparison(optimized1, optimized2, precision, decimals, invRate, day, 365, precision)
+    await utils.runComparison(
+      optimized1,
+      optimized2,
+      precision,
+      decimals,
+      invRate,
+      day,
+      365,
+      precision
+    );
   }
-  
-  
 }
 
 main()

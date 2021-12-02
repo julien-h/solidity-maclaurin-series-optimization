@@ -13,10 +13,14 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const baselineContract = await hre.ethers.getContractFactory("MBTestBaseline");
+  const baselineContract = await hre.ethers.getContractFactory(
+    "MBTestBaseline"
+  );
   const baseline = await baselineContract.deploy();
 
-  const optimizedContract = await hre.ethers.getContractFactory("MBTestOptimized4");
+  const optimizedContract = await hre.ethers.getContractFactory(
+    "MBTestOptimized4"
+  );
   const optimized = await optimizedContract.deploy();
 
   await baseline.deployed();
@@ -33,7 +37,13 @@ async function main() {
         await utils.runComparison_(
           (k, x, a, b, p) => utils.runTestCase(baseline, k, x, a, b, p),
           (k, x, a, b, p) => utils.runTestCaseV3(optimized, k, x, a, b, p),
-          iTestCase, decimals, invRate, day, 365, precision)
+          iTestCase,
+          decimals,
+          invRate,
+          day,
+          365,
+          precision
+        );
         iTestCase += 1;
       }
     }

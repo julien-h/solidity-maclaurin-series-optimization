@@ -13,10 +13,14 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const baselineContract = await hre.ethers.getContractFactory("MBTestBaseline");
+  const baselineContract = await hre.ethers.getContractFactory(
+    "MBTestBaseline"
+  );
   const baseline = await baselineContract.deploy();
 
-  const optimizedContract = await hre.ethers.getContractFactory("MBTestOptimized2");
+  const optimizedContract = await hre.ethers.getContractFactory(
+    "MBTestOptimized2"
+  );
   const optimized = await optimizedContract.deploy();
 
   await baseline.deployed();
@@ -30,7 +34,16 @@ async function main() {
   for (let day = 1; day <= 365; day += 30) {
     for (let invRate = 2; invRate <= 11; invRate += 3) {
       for (let precision = 1; precision <= 21; precision += 1) {
-        await utils.runComparison(baseline, optimized, iTestCase, decimals, invRate, day, 365, precision)
+        await utils.runComparison(
+          baseline,
+          optimized,
+          iTestCase,
+          decimals,
+          invRate,
+          day,
+          365,
+          precision
+        );
         iTestCase += 1;
       }
     }

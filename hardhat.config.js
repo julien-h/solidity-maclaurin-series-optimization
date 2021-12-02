@@ -16,7 +16,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
- module.exports = {
+module.exports = {
   solidity: {
     compilers: [
       {
@@ -39,4 +39,4 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       },
     ],
   },
- };
+};

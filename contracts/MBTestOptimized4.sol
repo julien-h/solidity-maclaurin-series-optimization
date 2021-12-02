@@ -2,7 +2,6 @@
 pragma solidity 0.8.10;
 
 contract MBTestOptimized4 {
-
     /**
     @dev    Main Function. Used to calculate mcLaurinBinomial.
     @param  k - coefficient that numerator and denominator need to be multiplied by
@@ -27,8 +26,7 @@ contract MBTestOptimized4 {
         if (prec <= 3) {
             if (prec == 0) {
                 return 0;
-            }
-            else if (prec == 1) {
+            } else if (prec == 1) {
                 return k;
             } else if (prec == 2) {
                 return k + ((k * a) / (b * x));
@@ -38,20 +36,18 @@ contract MBTestOptimized4 {
                 // Each new factor is then computed by adding b to the numerator.
                 // Remark that if we used signed integers, we would only require special cases until the 2nd term.
                 //
-                // The curse of solidity is that duplication allows for better optimizations... So it's always a tradeoff 
+                // The curse of solidity is that duplication allows for better optimizations... So it's always a tradeoff
                 // between clean DRY code and its optimized counterpart.
                 //
-                return k
-                + ((k * a) / (b*x))
-                - ((k * a * (b - a)) / (b*x*2*b*x));
+                return k + ((k * a) / (b * x)) - ((k * a * (b - a)) / (b * x * 2 * b * x));
             }
-        } else { 
+        } else {
             //
             // most likely execution path: prec>3
             //
             uint256 bx = b * x;
             total = k + ((k * a) / bx);
-            
+
             uint256 factor_numer = b - a;
             uint256 factor_denom = bx + bx;
 
@@ -83,24 +79,24 @@ contract MBTestOptimized4 {
         }
     }
 
-  /**
-   * @param args arguments packed into a single uint256 as follows:
-   *             prec: rightmost 16 bits
-   *             b: next 16 bits
-   *             a: next 16 bits
-   *             x: next 16 bits
-   *             k: next 128 bits
-   */
-  function calcExponential(uint256 args) public pure returns (uint256) {
-    uint256 prec = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 b = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 a = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 x = args & uint16(int16(-1));
-    args >>= 16;
-    uint256 k = args & uint128(int128(-1));
-    return maclaurinBinomial(k, x, a, b, prec);
-  }
+    /**
+     * @param args arguments packed into a single uint256 as follows:
+     *             prec: rightmost 16 bits
+     *             b: next 16 bits
+     *             a: next 16 bits
+     *             x: next 16 bits
+     *             k: next 128 bits
+     */
+    function calcExponential(uint256 args) public pure returns (uint256) {
+        uint256 prec = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 b = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 a = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 x = args & uint16(int16(-1));
+        args >>= 16;
+        uint256 k = args & uint128(int128(-1));
+        return maclaurinBinomial(k, x, a, b, prec);
+    }
 }
